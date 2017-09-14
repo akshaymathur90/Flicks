@@ -1,6 +1,9 @@
 package com.codepath.com.flicks;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,14 +26,19 @@ import okhttp3.OkHttpClient;
  * Created by akshaymathur on 9/13/17.
  */
 
-public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.BasicMovieViewHolder> {
+public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Movie> mMovieList;
+    private final int LOWRATEDMOVIE = 0;
+    private final int HIGHRATEDMOVIE = 1;
+    private Picasso picasso;
 
     public MoviesRecyclerViewAdapter(Context context,List<Movie> movies){
         mContext = context;
         mMovieList = movies;
+        OkHttpClient client = OkHttpClientSingleton.getInstance();
+        picasso = new Picasso.Builder(mContext).downloader(new OkHttp3Downloader(client)).build();
     }
 
     public void setDataSet(List<Movie> movies){
@@ -38,26 +46,79 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         notifyDataSetChanged();
     }
     @Override
-    public BasicMovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.basic_movie_item,parent,false);
-        BasicMovieViewHolder viewHolder = new BasicMovieViewHolder(itemView);
-        return viewHolder;
+
+        switch (viewType){
+            case LOWRATEDMOVIE:
+                View lowItemView = inflater.inflate(R.layout.basic_movie_item,parent,false);
+                return new BasicMovieViewHolder(lowItemView);
+            case HIGHRATEDMOVIE:
+                View highItemView = inflater.inflate(R.layout.high_rated_movie_item,parent,false);
+                return new HighRatedMovieViewHolder(highItemView);
+            default:
+                View defItemView = inflater.inflate(R.layout.basic_movie_item,parent,false);
+                return new BasicMovieViewHolder(defItemView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(BasicMovieViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Movie movie = mMovieList.get(position);
 
-        holder.mTextViewMovieName.setText(movie.getTitle());
-        holder.mTextViewMovieDesc.setText(movie.getOverview());
+        switch (holder.getItemViewType()){
+            case LOWRATEDMOVIE:
+                BasicMovieViewHolder basicMovieViewHolder = (BasicMovieViewHolder) holder;
+                bindLowRatedViewHolder(basicMovieViewHolder,movie);
+                break;
+            case HIGHRATEDMOVIE:
+                HighRatedMovieViewHolder highRatedMovieViewHolder = (HighRatedMovieViewHolder) holder;
+                bindHighRatedMovieHolder(highRatedMovieViewHolder,movie);
+        }
+
+
+
+    }
+
+    private void bindHighRatedMovieHolder(HighRatedMovieViewHolder highRatedMovieViewHolder, Movie movie) {
+
+        picasso.load(movie.getBackdropPath())
+                .placeholder(R.drawable.landscape)
+                .transform(new RoundedCornersTransformation(10, 10))
+                .into(highRatedMovieViewHolder.mImageViewMovieBackDrop);
+    }
+
+    public void bindLowRatedViewHolder(BasicMovieViewHolder basicMovieViewHolder, final Movie movie){
+
+        basicMovieViewHolder.mTextViewMovieName.setText(movie.getTitle());
+        basicMovieViewHolder.mTextViewMovieDesc.setText(movie.getOverview());
         Log.d("DEBUG",movie.getPosterPath());
-        OkHttpClient client = OkHttpClientSingleton.getInstance();
-        Picasso picasso = new Picasso.Builder(mContext).downloader(new OkHttp3Downloader(client)).build();
-        picasso.load(movie.getPosterPath())
-                .placeholder(R.drawable.default_placeholder_portrait).transform(new RoundedCornersTransformation(10, 10))
-                .into(holder.mImageViewMoviePoster);
+
+        String imageURL;
+        int placeholder;
+        int orientation = mContext.getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            imageURL = movie.getPosterPath();
+            placeholder = R.drawable.portrait;
+        }else{
+            imageURL = movie.getBackdropPath();
+            placeholder = R.drawable.landscape;
+            //holder.mImageViewMoviePoster
+        }
+        picasso.load(imageURL)
+                .placeholder(placeholder)
+                .transform(new RoundedCornersTransformation(10, 10))
+                .into(basicMovieViewHolder.mImageViewMoviePoster);
+
+        basicMovieViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext,MovieDetailActivity.class);
+                intent.putExtra(mContext.getString(R.string.key_movie),movie);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
@@ -66,13 +127,36 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         return mMovieList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        Movie movie = mMovieList.get(position);
+        if(movie.getVoteAverage()>5){
+            return HIGHRATEDMOVIE;
+        }else if(movie.getVoteAverage()<=5){
+            return LOWRATEDMOVIE;
+        }
+        return -1;
+
+    }
 
     class BasicMovieViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.iv_movie_poster) ImageView mImageViewMoviePoster;
         @BindView(R.id.tv_movie_name) TextView mTextViewMovieName;
         @BindView(R.id.tv_movie_desc) TextView mTextViewMovieDesc;
-
+        View mView;
         public BasicMovieViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+            ButterKnife.bind(this,itemView);
+        }
+
+    }
+
+    public class HighRatedMovieViewHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.iv_back_drop) ImageView mImageViewMovieBackDrop;
+
+        public HighRatedMovieViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }

@@ -7,4 +7,5 @@
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="rl_margin_top">8dp</dimen>
     <dimen name="rl_margin_bottom">8dp</dimen>
+    <dimen name="text_padding_top">10dp</dimen>
 </resources>

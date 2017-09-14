@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.codepath.com.flicks.MovieDetailActivity">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_back_drop_image"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_released_on"
+        android:layout_below="@id/iv_back_drop_image"
+        android:id="@+id/tv_released_on_string"
+        android:padding="@dimen/text_padding_top"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_released_on"
+        android:layout_below="@id/iv_back_drop_image"
+        tools:text="2017-07-05"
+        android:layout_toRightOf="@id/tv_released_on_string"
+        android:layout_toEndOf="@id/tv_released_on_string"
+        android:padding="@dimen/text_padding_top"
+        android:id="@+id/tv_release_date"/>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_released_on_string"
+        android:id="@+id/rb_movie_rating"
+        android:layout_marginBottom="@dimen/rl_margin_bottom"
+        tools:rating="3"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="@string/tools_string_movie_desc"
+        android:layout_below="@id/rb_movie_rating"
+        android:padding="@dimen/text_padding_top"
+        android:id="@+id/tv_movie_synopsis"/>
+
+</RelativeLayout>
