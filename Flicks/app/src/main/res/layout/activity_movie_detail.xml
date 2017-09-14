@@ -6,16 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codepath.com.flicks.MovieDetailActivity">
-    <ImageView
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/iv_back_drop_image"/>
+        android:id="@+id/frame_layout">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_back_drop_image"
+            tools:src="@drawable/landscape"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_play_circle_outline_white_24dp"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/string_released_on"
-        android:layout_below="@id/iv_back_drop_image"
+        android:layout_below="@id/frame_layout"
         android:id="@+id/tv_released_on_string"
         android:padding="@dimen/text_padding_top"/>
 
@@ -23,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/string_released_on"
-        android:layout_below="@id/iv_back_drop_image"
+        android:layout_below="@id/frame_layout"
         tools:text="2017-07-05"
         android:layout_toRightOf="@id/tv_released_on_string"
         android:layout_toEndOf="@id/tv_released_on_string"
