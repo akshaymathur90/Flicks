@@ -63,8 +63,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         final OkHttpClient client = OkHttpClientSingleton.getInstance();
         Picasso picasso = new Picasso.Builder(this)
                 .downloader(new OkHttp3Downloader(client)).build();
-
-        picasso.load(movie.getBackdropPath())
+        String backDropImagePath = movie.getBackdropPath();
+        if(backDropImagePath==null){
+            backDropImagePath = movie.getPosterPath();
+        }
+        picasso.load(backDropImagePath)
                 .placeholder(R.drawable.landscape)
                 .transform(new RoundedCornersTransformation(10, 10))
                 .into(mImageViewBackDrop);

@@ -143,8 +143,10 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mListState != null)
+        if (mListState != null) {
             linearLayoutManager.onRestoreInstanceState(mListState);
+            mListState=null;
+        }
     }
 
     @Override
