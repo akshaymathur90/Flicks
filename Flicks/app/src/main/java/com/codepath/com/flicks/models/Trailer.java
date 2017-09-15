@@ -1,12 +1,7 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by akshaymathur on 9/14/17.

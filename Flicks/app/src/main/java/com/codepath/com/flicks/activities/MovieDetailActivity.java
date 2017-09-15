@@ -1,4 +1,4 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.codepath.com.flicks.helper.OkHttpClientSingleton;
+import com.codepath.com.flicks.R;
+import com.codepath.com.flicks.models.Movie;
+import com.codepath.com.flicks.models.Trailer;
 import com.google.gson.Gson;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;

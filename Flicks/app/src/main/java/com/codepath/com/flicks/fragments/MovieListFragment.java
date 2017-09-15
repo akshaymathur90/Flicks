@@ -1,4 +1,4 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codepath.com.flicks.adapters.MoviesRecyclerViewAdapter;
+import com.codepath.com.flicks.helper.OkHttpClientSingleton;
+import com.codepath.com.flicks.R;
+import com.codepath.com.flicks.models.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;

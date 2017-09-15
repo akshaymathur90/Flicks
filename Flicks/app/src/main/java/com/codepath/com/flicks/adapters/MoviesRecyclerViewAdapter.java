@@ -1,9 +1,8 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.com.flicks.helper.OkHttpClientSingleton;
+import com.codepath.com.flicks.R;
+import com.codepath.com.flicks.models.Movie;
+import com.codepath.com.flicks.models.Trailer;
+import com.codepath.com.flicks.activities.MovieDetailActivity;
+import com.codepath.com.flicks.activities.MoviePlayerActivity;
 import com.google.gson.Gson;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
