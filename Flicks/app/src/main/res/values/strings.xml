@@ -8,4 +8,6 @@
     <string name="string_released_on">Released On:</string>
     <string name="tools_string_movie_desc">Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.</string>
     <string name="key_movie">movie</string>
+    <string name="trailer_data_url">https://api.themoviedb.org/3/movie/%s/videos</string>
+    <string name="key_trailer">trailer_key</string>
 </resources>

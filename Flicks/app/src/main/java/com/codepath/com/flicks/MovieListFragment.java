@@ -100,15 +100,12 @@ public class MovieListFragment extends Fragment {
                     try {
                         JSONObject jsonObject = new JSONObject(responseString);
                         final JSONArray jsonArray = jsonObject.getJSONArray("results");
+                        final List<Movie> dataset = Movie.fromArray(jsonArray);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    mRecyclerViewAdapter.setDataSet(Movie.fromArray(jsonArray));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    mRecyclerViewAdapter.setDataSet(dataset);
                                 }
-                            }
                         });
 
                     } catch (JSONException e) {
