@@ -2,6 +2,7 @@ package com.codepath.com.flicks;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,8 +40,10 @@ public class MovieListFragment extends Fragment {
 
     @BindView(R.id.rv_movies_list) RecyclerView mRecyclerView;
     private Unbinder unbinder;
-    private List<Movie> mMovieList;
+    private ArrayList<Movie> mMovieList;
     MoviesRecyclerViewAdapter mRecyclerViewAdapter;
+    LinearLayoutManager linearLayoutManager;
+    Parcelable mListState;
 
     OkHttpClient client = OkHttpClientSingleton.getInstance();
     public MovieListFragment() {
@@ -64,16 +67,23 @@ public class MovieListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_movie_list, container, false);
         unbinder = ButterKnife.bind(this, v);
 
-        mMovieList = new ArrayList<>();
+        if(savedInstanceState!=null){
+            mMovieList = savedInstanceState.getParcelableArrayList(getString(R.string.key_dataset));
+            mListState = savedInstanceState.getParcelable(getString(R.string.key_list_view));
+        }else{
+            mMovieList = new ArrayList<>();
+            fetchMoviesFromAPI();
+        }
+
         mRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mMovieList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
 
-        fetchMoviesFromAPI();
+
         return v;
     }
 
@@ -126,8 +136,22 @@ public class MovieListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mListState != null)
+            linearLayoutManager.onRestoreInstanceState(mListState);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getString(R.string.key_dataset),mMovieList);
+        outState.putParcelable(getString(R.string.key_list_view),linearLayoutManager.onSaveInstanceState());
     }
 }
