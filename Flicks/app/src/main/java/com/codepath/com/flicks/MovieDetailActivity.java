@@ -39,6 +39,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView mTextViewSynopsis;
     @BindView(R.id.rb_movie_rating)
     RatingBar mRatingBarMovieRating;
+    @BindView(R.id.tv_movie_title)
+    TextView mTextViewMovieTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         final Movie movie = getIntent().getParcelableExtra(getString(R.string.key_movie));
 
+        mTextViewMovieTitle.setText(movie.getTitle());
         mTextViewReleaseDate.setText(movie.getReleaseDate());
         mTextViewSynopsis.setText(movie.getOverview());
         mRatingBarMovieRating.setRating(movie.getVoteAverage().floatValue());

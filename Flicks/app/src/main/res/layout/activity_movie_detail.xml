@@ -24,12 +24,19 @@
 
     </FrameLayout>
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frame_layout"
+        android:id="@+id/tv_movie_title"
+        tools:text="Hardcore Henry"
+        android:textSize="@dimen/text_size_title"
+        android:padding="@dimen/text_padding_top"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/string_released_on"
-        android:layout_below="@id/frame_layout"
+        android:layout_below="@id/tv_movie_title"
         android:id="@+id/tv_released_on_string"
         android:padding="@dimen/text_padding_top"/>
 
@@ -37,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/string_released_on"
-        android:layout_below="@id/frame_layout"
+        android:layout_below="@id/tv_movie_title"
         tools:text="2017-07-05"
         android:layout_toRightOf="@id/tv_released_on_string"
         android:layout_toEndOf="@id/tv_released_on_string"
@@ -50,7 +57,9 @@
         android:layout_below="@id/tv_released_on_string"
         android:id="@+id/rb_movie_rating"
         android:layout_marginBottom="@dimen/rl_margin_bottom"
-        tools:rating="3"/>
+        tools:rating="3"
+        android:layout_marginLeft="@dimen/rv_left_margin"
+        android:layout_marginStart="@dimen/rv_left_margin"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
