@@ -1,5 +1,5 @@
 
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

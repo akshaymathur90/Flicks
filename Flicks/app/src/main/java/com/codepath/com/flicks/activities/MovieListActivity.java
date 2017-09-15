@@ -1,11 +1,12 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.activities;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import butterknife.BindView;
+import com.codepath.com.flicks.fragments.MovieListFragment;
+import com.codepath.com.flicks.R;
 
 public class MovieListActivity extends AppCompatActivity {
 

@@ -1,9 +1,8 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.com.flicks.helper.OkHttpClientSingleton;
+import com.codepath.com.flicks.R;
+import com.codepath.com.flicks.models.Movie;
+import com.codepath.com.flicks.models.Trailer;
+import com.codepath.com.flicks.activities.MovieDetailActivity;
+import com.codepath.com.flicks.activities.MoviePlayerActivity;
 import com.google.gson.Gson;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -26,12 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by akshaymathur on 9/13/17.
@@ -44,7 +44,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private final int LOWRATEDMOVIE = 0;
     private final int HIGHRATEDMOVIE = 1;
     private Picasso picasso;
-    OkHttpClient client;
+    private OkHttpClient client;
 
     public MoviesRecyclerViewAdapter(Context context,List<Movie> movies){
         mContext = context;
@@ -106,46 +106,12 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         highRatedMovieViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Request request = new Request.Builder()
-                        .url(getTrailersAPIURL(String.valueOf(movie.getId())))
-                        .build();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
+                Intent intent = new Intent(mContext,MoviePlayerActivity.class);
+                intent.putExtra(mContext.getString(R.string.key_movie_id),movie.getId());
+                mContext.startActivity(intent);
 
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        if (!response.isSuccessful()) {
-                            throw new IOException("Unexpected code " + response);
-                        }else{
-                            String stringResponse = response.body().string();
-                            try {
-                                JSONObject jsonObject = new JSONObject(stringResponse);
-                                JSONArray jsonArray = jsonObject.getJSONArray("results");
-                                Gson gson = new Gson();
-                                Trailer trailer = gson.fromJson(jsonArray.get(0).toString(),Trailer.class);
-                                String trailerKey = trailer.getKey();
-                                Intent intent = new Intent(mContext,MoviePlayerActivity.class);
-                                intent.putExtra(mContext.getString(R.string.key_trailer),trailerKey);
-                                mContext.startActivity(intent);
-                            }catch (JSONException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
             }
         });
-    }
-
-    public String getTrailersAPIURL(String movieId){
-
-        HttpUrl.Builder urlBuilder =
-                HttpUrl.parse(String.format(mContext.getString(R.string.trailer_data_url),movieId)).newBuilder();
-        urlBuilder.addQueryParameter("api_key", mContext.getString(R.string.api_key));
-        return urlBuilder.build().toString();
     }
 
     public void bindLowRatedViewHolder(BasicMovieViewHolder basicMovieViewHolder, final Movie movie){

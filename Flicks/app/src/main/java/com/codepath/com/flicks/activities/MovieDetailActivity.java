@@ -1,4 +1,4 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.codepath.com.flicks.helper.OkHttpClientSingleton;
+import com.codepath.com.flicks.R;
+import com.codepath.com.flicks.models.Movie;
+import com.codepath.com.flicks.models.Trailer;
 import com.google.gson.Gson;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -68,57 +72,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         mImageViewBackDrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Request request = new Request.Builder()
-                        .url(getTrailersAPIURL(String.valueOf(movie.getId())))
-                        .build();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        if (!response.isSuccessful()) {
-                            throw new IOException("Unexpected code " + response);
-                        }else{
-                            String stringResponse = response.body().string();
-                            try {
-                                JSONObject jsonObject = new JSONObject(stringResponse);
-                                JSONArray jsonArray = jsonObject.getJSONArray("results");
-                                Log.d("DEBUG",jsonArray.toString());
-                                Gson gson = new Gson();
-                                Trailer trailer = gson.fromJson(jsonArray.get(0).toString(),Trailer.class);
-                                String trailerKey = trailer.getKey();
-                                Log.d("DEBUG",trailerKey);
-                                Intent intent = new Intent(MovieDetailActivity.this,MoviePlayerActivity.class);
-                                intent.putExtra(getString(R.string.key_trailer),trailerKey);
-                                startActivity(intent);
-
-
-                            }catch (JSONException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-
-
-
-
-
-
+                Intent intent = new Intent(MovieDetailActivity.this,MoviePlayerActivity.class);
+                intent.putExtra(getString(R.string.key_movie_id),movie.getId());
+                startActivity(intent);
             }
         });
     }
 
-    public String getTrailersAPIURL(String movieId){
-
-        Log.d("DEBUG","Movie id is-->"+movieId);
-        HttpUrl.Builder urlBuilder =
-                HttpUrl.parse(String.format(getString(R.string.trailer_data_url),movieId)).newBuilder();
-        urlBuilder.addQueryParameter("api_key",getString(R.string.api_key));
-        Log.d("DEBUG","Trailer API url is-->"+urlBuilder.build().toString());
-        return urlBuilder.build().toString();
-    }
 }

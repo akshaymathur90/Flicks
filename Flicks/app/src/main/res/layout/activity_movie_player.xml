@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.com.flicks.MoviePlayerActivity">
+    tools:context=".activities.MoviePlayerActivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/player"

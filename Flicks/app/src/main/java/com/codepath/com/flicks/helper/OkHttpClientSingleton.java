@@ -1,4 +1,4 @@
-package com.codepath.com.flicks;
+package com.codepath.com.flicks.helper;
 
 import okhttp3.OkHttpClient;
 
